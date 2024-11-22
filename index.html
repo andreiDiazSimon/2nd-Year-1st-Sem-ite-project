@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./index.css">
+	<title>Andrei Simon</title>
+</head>
+
+<body>
+	<div class="main-navbar-container">
+		<div onclick="showContent('aboutMe')">AboutMe</div>
+		<div onclick="showContent('quiz')">Quiz</div>
+	</div>
+
+	<div class="main-entrycontent-container">
+		<div id="aboutMe" class="entrycontent-container">
+			<div class="entrycontent-title-text">
+				&lt; Andrei<br>&nbsp;&nbsp;&nbsp;&nbsp;Simon /&gt;
+			</div>
+			<hr class="entrycontent-seperator-line">
+			<div class="entrycontent-title-text-description">I’m a 19-year-old second-year BSIT student at
+				Bestlink College of the Philippines. I live at North Fairview Park
+				Subdivision. I’m passionate about Software Development and focused on learning new
+				skills to help
+				me grow in my studies and future career.</div>
+		</div>
+		<div id="quiz" style="display:none;">
+			<div id="quiz-container">
+			</div>
+
+			<div class="navigation-buttons">
+				<button id="prev-button" onclick="prevQuestion()">Previous</button>
+				<button id="next-button" onclick="nextQuestion()">Next</button>
+			</div>
+		</div>
+
+		<div class="blur1"></div>
+		<div class="blur2"></div>
+		<div class="blur3"></div>
+		<script>
+			function showContent(content) {
+				document.getElementById('aboutMe').style.display = 'none';
+				document.getElementById('quiz').style.display = 'none';
+
+				if (content === 'aboutMe') return document.getElementById('aboutMe').style.display = 'block';
+				else return document.getElementById('quiz').style.display = 'block';
+			}
+			showContent('aboutMe');
+
+			document.addEventListener('mousemove', function (event) {
+				let blur3 = document.getElementsByClassName('blur3')[0];
+
+				let x = event.clientX;
+				let y = event.clientY;
+
+				blur3.style.left = (x - blur3.offsetWidth / 2) + 'px';
+				blur3.style.top = (y - blur3.offsetHeight / 2) + 'px';
+			});
+
+			const questions = [
+				"kahit alam kong malayong maging kami",
+				"pero at least sinubukan kong mahalin",
+				"kahit sa panaginip ko lang kayang dalhin",
+				"pero mahal ko kahit ganon",
+				"dahil alam kong araw-araw nakikitang may kasama siyang iba sa harapan ko pa",
+				"gusto ko lang naman na maramdaman ko sa kaniya yung pagmamahal na di man lang naramdaman sa kahit sinong babae",
+				"gusto kong malaman nya na",
+				"mahal ko sya",
+				"...",
+				"......."
+			];
+
+			let currentQuestionIndex = 0;
+
+			const quizContainer = document.getElementById('quiz-container');
+			const prevButton = document.getElementById('prev-button');
+			const nextButton = document.getElementById('next-button');
+
+			function renderQuestions() {
+				questions.forEach((question, index) => {
+					const questionDiv = document.createElement('div');
+					questionDiv.classList.add('question-container');
+					if (index === 0) questionDiv.classList.add('active');
+					questionDiv.innerHTML = `
+		<div>${index + 1}. ${question}</div>
+		<input type="text" class="text" placeholder="Your answer here">
+		`;
+					quizContainer.appendChild(questionDiv);
+				});
+			}
+
+			function updateQuestionDisplay() {
+				const questionContainers = document.querySelectorAll('.question-container');
+				questionContainers.forEach((container, index) => {
+					container.classList.toggle('active', index === currentQuestionIndex);
+				});
+
+				prevButton.disabled = currentQuestionIndex === 0;
+				nextButton.disabled = currentQuestionIndex === questions.length - 1;
+			}
+
+			function nextQuestion() {
+				if (currentQuestionIndex < questions.length - 1) {currentQuestionIndex++; updateQuestionDisplay();}
+			}
+			function prevQuestion() {
+				if (currentQuestionIndex > 0) {
+					currentQuestionIndex--;
+					updateQuestionDisplay();
+				}
+			}
+
+			renderQuestions();
+			updateQuestionDisplay();
+		</script>
+</body>
+
+</html>
